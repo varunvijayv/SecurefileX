@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureFileX | Dashboard</title>
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top left, #0a192f, #020c1b);
+      color: #ccd6f6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 30px 0;
+      background: rgba(10, 25, 47, 0.85);
+      box-shadow: 0 4px 15px rgba(100, 255, 218, 0.2);
+    }
+
+    header h1 {
+      color: #64ffda;
+      font-size: 32px;
+      margin: 0;
+    }
+
+    header p {
+      color: #a8b2d1;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .dashboard-container {
+      background: rgba(17, 34, 64, 0.85);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(100, 255, 218, 0.2);
+      width: 90%;
+      max-width: 950px;
+      margin-top: 40px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .file-upload-box {
+      border: 2px dashed #64ffda;
+      border-radius: 14px;
+      padding: 40px;
+      background: rgba(100, 255, 218, 0.05);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .file-upload-box:hover {
+      background: rgba(100, 255, 218, 0.1);
+      transform: scale(1.02);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    #fileName {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #a8b2d1;
+    }
+
+    button {
+      background: #64ffda;
+      color: #0a192f;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #52d7b4;
+      transform: scale(1.05);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #233554;
+      color: #64ffda;
+      font-weight: 600;
+    }
+
+    td {
+      background-color: rgba(17, 34, 64, 0.9);
+      color: #ccd6f6;
+      border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+    }
+
+    tr:hover td {
+      background-color: rgba(100, 255, 218, 0.05);
+    }
+
+    .download-btn {
+      background: transparent;
+      color: #64ffda;
+      border: 1px solid #64ffda;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #64ffda;
+      color: #0a192f;
+    }
+
+    .logout-btn {
+      background: transparent;
+      color: #64ffda;
+      border: 1px solid #64ffda;
+      padding: 8px 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #64ffda;
+      color: #0a192f;
+    }
+
+    footer {
+      text-align: center;
+      color: #8892b0;
+      font-size: 13px;
+      margin-top: auto;
+      padding: 20px;
+    }
+
+    footer a {
+      color: #64ffda;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SecureFileX Dashboard</h1>
+    <p th:text="'Welcome, ' + ${#authentication.name} + '!'"></p>
+  </header>
+
+  <div class="dashboard-container">
+
+    <div class="upload-section">
+      <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+        <label class="file-upload-box">
+          <input type="file" name="file" id="fileUpload" required />
+          <span id="fileLabel">📁 Click or drag file here to upload securely</span>
+        </label>
+        <div id="fileName"></div>
+        <button type="submit">🔒 Upload & Encrypt</button>
+      </form>
+    </div>
+
+    <h3>Your Uploaded Files</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Uploaded At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="file : ${files}">
+          <td th:text="${file.filename}">filename.txt</td>
+          <td th:text="${#temporals.format(file.uploadTime, 'dd-MM-yyyy HH:mm')}">2025-11-01 10:30</td>
+          <td>
+            <a th:href="@{'/download/' + ${file.id}}">
+              <button type="button" class="download-btn">⬇ Download</button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout-btn">🚪 Logout</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>SecureFileX © 2025 | Built for Secure Cloud Storage</p>
+  </footer>
+
+  <script>
+    const fileInput = document.getElementById('fileUpload');
+    const fileNameDisplay = document.getElementById('fileName');
+    const fileLabel = document.getElementById('fileLabel');
+
+    fileInput.addEventListener('change', (event) => {
+      const fileName = event.target.files[0]?.name;
+      if (fileName) {
+        fileLabel.textContent = "File selected:";
+        fileNameDisplay.textContent = fileName;
+      } else {
+        fileLabel.textContent = "📁 Click or drag file here to upload securely";
+        fileNameDisplay.textContent = "";
+      }
+    });
+  </script>
+</body>
+</html>

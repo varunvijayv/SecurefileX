@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureFileX - Login</title>
+  <style>
+    /* same styling as before — kept for brevity */
+    body{font-family:"Poppins",sans-serif;background:linear-gradient(135deg,#0a192f,#112240);color:#ccd6f6;height:100vh;display:flex;justify-content:center;align-items:center;margin:0}
+    .login-card{background:rgba(17,34,64,.95);padding:50px 40px;border-radius:16px;box-shadow:0 0 25px rgba(100,255,218,.2);text-align:center;width:380px}
+    h2{color:#64ffda;margin-bottom:25px;font-size:26px}
+    label{font-size:14px;color:#a8b2d1;display:block;margin-bottom:6px;text-align:left}
+    input[type="text"],input[type="password"]{width:100%;padding:12px;border-radius:8px;border:1px solid #233554;background:#0a192f;color:#ccd6f6}
+    button{width:100%;background:#64ffda;color:#0a192f;padding:12px;border-radius:8px;border:none;font-weight:600}
+    .footer{margin-top:20px;font-size:13px;color:#8892b0}
+    .footer a{color:#64ffda;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>🔐 SecureFileX Login</h2>
+
+    <!-- Spring Security will handle authentication. Successful login -> successHandler redirects -->
+    <form th:action="@{/login}" method="post">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" required />
+      </div>
+
+      <div style="margin-top:12px">
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" required />
+      </div>
+
+      <div style="margin-top:18px">
+        <button type="submit">Login</button>
+      </div>
+    </form>
+
+    <div class="message" th:if="${param.error}" style="margin-top:12px;color:#ff6b6b">
+      ⚠️ Invalid username or password
+    </div>
+
+    <div class="message" th:if="${param.logout}" style="margin-top:12px;color:#64ffda">
+      ✅ You have been logged out successfully.
+    </div>
+
+    <div class="footer">
+      <p>New user? <a th:href="@{/register}">Create an account</a></p>
+    </div>
+  </div>
+</body>
+</html>

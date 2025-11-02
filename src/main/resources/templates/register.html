@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | SecureFileX</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1f1f2e, #2e3a59);
+      color: #64ffda;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .register-container {
+      background: rgba(255, 255, 255, 0.06); /* corrected */
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 350px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    h2 { text-align: center; margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.3rem; }
+    input, select { width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: none; border-radius: 0.5rem; }
+    button { width: 100%; padding: 0.7rem; background: #4cafef; border: none; color: white; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #3b8ad9; }
+    .message { text-align: center; color: #ffb6b6; }
+    a { color: #4cafef; text-decoration: none; }
+    p.note { font-size: 12px; color: #cfcfcf; margin-top: -0.8rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>Create Account</h2>
+
+    <form th:action="@{/register}" method="post" th:object="${user}">
+      <label>Username:</label>
+      <input type="text" th:field="*{username}" placeholder="Enter username" required />
+
+      <label>Password:</label>
+      <input type="password" th:field="*{password}" placeholder="Enter password" required />
+
+      <!-- Role selector VISIBLE TO ALL -->
+      <div>
+        <label>Role:</label>
+        <select th:field="*{role}">
+          <option value="ROLE_USER">User</option>
+          <option value="ROLE_ADMIN">Admin</option>
+        </select>
+        <p class="note">Choose role for new user.</p>
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="message" th:if="${error}" th:text="${error}"></div>
+    <div class="message" th:if="${success}" th:text="${success}"></div>
+
+    <p style="text-align:center;margin-top:1rem;">
+      Already have an account? <a th:href="@{/login}">Login</a>
+    </p>
+  </div>
+</body>
+</html>
